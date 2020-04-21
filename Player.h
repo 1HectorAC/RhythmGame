@@ -18,6 +18,8 @@ public:
     void destroyEnemy(int button);
     int array[4];
     void destroyEnemy2();
+    int width;
+    int height;
 //private:
 
 //    QMediaPlayer * bulletsound;

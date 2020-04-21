@@ -8,9 +8,13 @@
 extern Game * game;
 Player::Player(QGraphicsItem *parent): QGraphicsPixmapItem(parent){
 
+    width = game->GLOBAL_WIDTH / 3.763;
+    height = game->GLOBAL_HEIGHT / 11.35;
     // set graphic
-    setPixmap(QPixmap("resources/starStrip.png"));
-   // setPixmap(QPixmap::fromImage(image.scaled(400,100)));
+    QImage images("resources/starStrip.png");
+    setPixmap(QPixmap::fromImage(images.scaled(width,height)));
+
+
    // firstRelease = true;
     for (int i =0; i < 4; i++){
         array[i] = 0;
@@ -201,21 +205,21 @@ void Player::destroyEnemy2()
         }
 
         for (int i = 0, n = colliding_items.size(); i < n; ++i){
-            //y limit to how closely it reads in the input
-            if (typeid(*(colliding_items[i])) == typeid(Enemy) && colliding_items[i]->y() > 1025){
-                 if(colliding_items[i]->x() < 300){
+            //y limit to how closely it reads in the input, add "&& colliding_items[i]->y() > value here"
+            if (typeid(*(colliding_items[i])) == typeid(Enemy) ){
+                 if(colliding_items[i]->x() < 720){
                      checkArray[0] = 1;
                     // game->noteCount->increase();
                  }
-                 else if(colliding_items[i]->x() >= 300 && colliding_items[i]->x() < 400){
+                 else if(colliding_items[i]->x() >= 720 && colliding_items[i]->x() < 850){
                      checkArray[1] = 1;
                     // game->noteCount->increase();
                  }
-                 else if(colliding_items[i]->x() >= 400 && colliding_items[i]->x() < 500){
+                 else if(colliding_items[i]->x() >= 850 && colliding_items[i]->x() < 975){
                      checkArray[2] = 1;
                      //game->noteCount->increase();
                  }
-                 else if(colliding_items[i]->x() >= 500 && colliding_items[i]->x() < 600 ){
+                 else if(colliding_items[i]->x() >= 990 && colliding_items[i]->x() < 1100 ){
                      checkArray[3] = 1;
                      //game->noteCount->increase();
                  }

@@ -4,43 +4,35 @@
 #include <QList>
 #include <stdlib.h> // rand() -> really large int
 #include "Game.h"
-
 #include <typeinfo>
 #include <QList>
 
 extern Game * game;
 
-Enemy::Enemy(QGraphicsItem *parent): QObject(), QGraphicsPixmapItem(parent){
+Enemy::Enemy(int height, int width, QGraphicsItem *parent): QObject(), QGraphicsPixmapItem(parent){
+    //values used to set height and width of image
+    this->height = height;
+    this->width = width;
 
-
-//    QImage images("resources/blueBox.png");
-//    setPixmap(QPixmap::fromImage(images.scaled(90,90)));
-
-    // make/connect a timer to move() the enemy every so often
-   //movement = new QTimer(this);
-   // connect(movement,SIGNAL(timeout()),this,SLOT(move()));
-    //movement->start(20);
 }
-
-
 
 void Enemy::setImage(int value)
 {
-    if(value == 200){
+    if(value == 1){
         QImage images("resources/yellowStar.png");
-        setPixmap(QPixmap::fromImage(images.scaled(90,90)));
+        setPixmap(QPixmap::fromImage(images.scaled(width,height)));
     }
-    else if(value == 300){
+    else if(value == 2){
         QImage images("resources/blueStar.png");
-       setPixmap(QPixmap::fromImage(images.scaled(90,90)));
+       setPixmap(QPixmap::fromImage(images.scaled(width,height)));
     }
-    else if(value == 400){
+    else if(value == 3){
         QImage images("resources/purpleStar.png");
-       setPixmap(QPixmap::fromImage(images.scaled(90,90)));
+       setPixmap(QPixmap::fromImage(images.scaled(width,height)));
     }
-    else if(value == 500){
+    else{
         QImage images("resources/darkBlueStar.png");
-       setPixmap(QPixmap::fromImage(images.scaled(90,90)));
+       setPixmap(QPixmap::fromImage(images.scaled(width,height)));
     }
 }
 
@@ -48,7 +40,7 @@ void Enemy::move(){
     //18 //6
     setPos(x(),y()+3);
 
-    if (pos().y() > 1100){
+    if (pos().y() > 1000){
         //fix
         scene()->removeItem(this);
 

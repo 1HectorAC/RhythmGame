@@ -20,13 +20,14 @@
 #include <QGraphicsTextItem>
 #include "Test.h"
 #include <iostream>
+#include "math.h"
 
 using namespace std;
 Game::Game(QWidget *parent){
     scene = new QGraphicsScene();
     // 800 x 1200 now, maybe change later.
-    GLOBAL_WIDTH = 800;
-    GLOBAL_HEIGHT = 1200;
+    GLOBAL_WIDTH = 1920;
+    GLOBAL_HEIGHT = 1080;
 
     scene->setSceneRect(0,0, GLOBAL_WIDTH, GLOBAL_HEIGHT);
     setScene(scene);
@@ -52,7 +53,7 @@ void Game::start(){
 //    if ( ! (istringstream(song) >> number) ) number = 0;
 
 
-    QImage stuff("resources/gameScreen3.png");
+    QImage stuff("resources/gameScreen4.png");
     setBackgroundBrush(QBrush(stuff.scaled(GLOBAL_WIDTH,GLOBAL_HEIGHT)));
 
 
@@ -78,11 +79,12 @@ void Game::start(){
 
     //player
     player = new Player();
-    player->setPos(200, 1000);
+    //200, 1000
+    player->setPos(round(GLOBAL_WIDTH * (.365)), GLOBAL_WIDTH * 0.467);
     player->setFlag(QGraphicsItem::ItemIsFocusable);
     player->setFocus();
-
     scene->addItem(player);
+
     enemys = new EnemyRow();
     scene->addItem(enemys);
 

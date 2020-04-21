@@ -9,12 +9,14 @@
 class Enemy: public QObject,public QGraphicsPixmapItem{
     Q_OBJECT
 public:
-    Enemy(QGraphicsItem * parent=0);
+    Enemy(int height, int width, QGraphicsItem * parent=0);
     //~Enemy();
      QTimer * pauseCheck;
     QTimer * movement;
     void setImage(int value);
     void setTimer(QTimer *timer);
+    int height;
+    int width;
 public slots:
     void move();
     void stopMove();

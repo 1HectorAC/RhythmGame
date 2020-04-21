@@ -10,6 +10,9 @@ public:
     SideGoal(QGraphicsItem * parent=0);
     void changeY();
     int getRandom();
+
+    int objHeight ;
+    int positionPoint;
 };
 
 #endif // SIDEGOAL_H

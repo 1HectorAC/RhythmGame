@@ -12,9 +12,9 @@ EnemyRow::EnemyRow(QGraphicsItem *parent): QGraphicsPixmapItem(parent){
 
 }
 void EnemyRow::spawn(int position){
-    //maybe set color or enemy buttons here
-    Enemy * enemy = new Enemy();
-    enemy->setPos(position, 200);
+    //size based on 1/4 of the the player part is
+    Enemy * enemy = new Enemy(game->GLOBAL_WIDTH / 4 / 4,game->GLOBAL_WIDTH / 4 / 4);
+    enemy->setPos(round(game->GLOBAL_WIDTH * (.3)) + position * 130, game->GLOBAL_WIDTH / 25);
     enemy->setImage(position);
 
     scene()->addItem(enemy);
@@ -29,7 +29,7 @@ void EnemyRow::dropEnemys()
 
     //delay to song
     game->songOptions->startCount++;
-    if(game->songOptions->startCount == 6)
+    if(game->songOptions->startCount == 5)
         game->songOptions->play();
 
     //Prevent enemy spawn if paused
@@ -46,20 +46,19 @@ void EnemyRow::dropEnemys()
         }
 
         //pos of far left fret button
-        int position = 200;
+        int position = 1;
         //end game
 
         //spawn fret buttons
         for (int i = 0; i < 4; i++){
             //change
             if (game->listSetup->list[game->listSetup->rows][i] == 1){
-                spawn(position);
+                spawn(position );
 
             }
 
-            position+=100;
+            position+=1;
         }
-        //position = 200;
         game->listSetup->rows++;
     }
 

@@ -8,15 +8,15 @@ extern Game * game;
 ManageSideBars::ManageSideBars()
 {
     rightBar = new SideBar();
-    rightBar->setPos(700 - 25, 600);
+    rightBar->setPos(game->GLOBAL_WIDTH *  .69, game->GLOBAL_HEIGHT / 2 + rightBar->objHeight / 2);
     leftBar = new SideBar();
-    leftBar->setPos(100 - 25, 600);
+    leftBar->setPos(game->GLOBAL_WIDTH * .272, game->GLOBAL_HEIGHT / 2 + rightBar->objHeight / 2);
 
     rightGoal = new SideGoal();
-    rightGoal->setPos(700 - 20, 600);
+    rightGoal->setPos(game->GLOBAL_WIDTH * .69, 600);
     rightGoal->changeY();
     leftGoal = new SideGoal();
-    leftGoal->setPos(100 - 20, 600);
+    leftGoal->setPos(game->GLOBAL_WIDTH * .272, 600);
     leftGoal->changeY();
 
 

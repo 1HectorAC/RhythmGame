@@ -11,6 +11,9 @@ public:
     SideBar(QGraphicsItem * parent=0);
     void moveUp();
     void moveDown();
+
+    int objHeight ;
+    int positionPoint;
 };
 
 #endif // SIDEBAR_H
