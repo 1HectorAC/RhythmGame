@@ -19,7 +19,6 @@ public:
     int width;
 public slots:
     void move();
-    void stopMove();
 
 };
 
