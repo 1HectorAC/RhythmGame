@@ -7,17 +7,18 @@ class ManageSideBars
 {
 public:
     ManageSideBars();
-    SideBar * leftBar;
-    SideBar * rightBar;
-    SideGoal * leftGoal;
-    SideGoal * rightGoal;
     void moveUp();
     void moveUp2();
     void moveDown();
     void moveDown2();
+    void WinCheck();
+
+    SideBar * leftBar;
+    SideBar * rightBar;
+    SideGoal * leftGoal;
+    SideGoal * rightGoal;
     bool goalHit1;
     bool goalHit2;
-    void WinCheck();
 };
 
 #endif // MANAGESIDEBARS_H
