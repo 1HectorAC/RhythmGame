@@ -1,31 +1,25 @@
-#include "sideGoal.h"
-#include "Game.h"
 #include <QImage>
 #include <random>
-#include "math.h"
+#include "sideGoal.h"
+#include "Game.h"
 
 extern Game * game;
+
 SideGoal::SideGoal(QGraphicsItem *parent): QObject(), QGraphicsPixmapItem(parent)
 {
+    //Setup image of object.
     QImage images("resources/smallStar.png");
-
     objHeight = round(game->height() / 16);
     setPixmap(QPixmap::fromImage(images.scaled(objHeight,objHeight)));
 
-    //set the point in the y-axis the object is in
+    //Set postitionPoint to 0. This signifies its position over a limiited y-axis values.
     positionPoint = 0;
 }
 
+//Change the y-position of the object to a random value.
 void SideGoal::changeY()
 {
-    /*
-    int random = this->y();
-    while(this->y() == random){
-        random = getRandom();
-    }
-    setPos(x(), random);
-    */
-
+    //Need random variable to make sure that the resulting change in position isn't the same as before.
     int random = positionPoint;
     while(random == positionPoint){
         random = getRandom();
@@ -36,6 +30,7 @@ void SideGoal::changeY()
 
 }
 
+//Get a random number between -6 and 4. These values relate to what the y-position can be.
 int SideGoal::getRandom()
 {
     //random position in side bar relative to sideBar objects max and min of -6 to 4
