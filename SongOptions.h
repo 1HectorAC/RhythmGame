@@ -8,9 +8,10 @@ class SongOptions
 public:
     SongOptions();
     void selectSong(int value);
-    QMediaPlayer * currentSong;
     void play();
     void pause();
+
+    QMediaPlayer * currentSong;
     int startCount;
 };
 
