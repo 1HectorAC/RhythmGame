@@ -13,17 +13,14 @@ public:
     void keyPressEvent(QKeyEvent * event);
     void keyReleaseEvent(QKeyEvent *event);
     void processMultiKey();
-    bool firstRelease;
+    void destroyEnemy();
 
-    void destroyEnemy(int button);
+    bool firstRelease;
     int array[4];
-    void destroyEnemy2();
     int width;
     int height;
-//private:
-
-//    QMediaPlayer * bulletsound;
     QSet<int> keysPressed;
+//    QMediaPlayer * hitsound;
 
 };
 

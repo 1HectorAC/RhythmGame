@@ -1,78 +1,74 @@
-#include "Player.h"
 #include <QGraphicsScene>
 #include <QKeyEvent>
+#include <typeinfo>
+#include "Player.h"
+#include "Enemy.h"
 #include "EnemyRow.h"
 #include "Game.h"
-#include <typeinfo>
-#include "Enemy.h"
-extern Game * game;
-Player::Player(QGraphicsItem *parent): QGraphicsPixmapItem(parent){
 
+extern Game * game;
+
+Player::Player(QGraphicsItem *parent): QGraphicsPixmapItem(parent){
+    //Set width and height of player.
     width = game->GLOBAL_WIDTH / 3.763;
     height = game->GLOBAL_HEIGHT / 11.35;
-    // set graphic
+
+    // set graphic image of player and size based on width and height.
     QImage images("resources/starStrip.png");
     setPixmap(QPixmap::fromImage(images.scaled(width,height)));
 
 
-   // firstRelease = true;
+   // Setup up variables involved with how keys are pressed.
     for (int i =0; i < 4; i++){
         array[i] = 0;
     }
     firstRelease = false;
-
 }
 
-
+//Action taken when a key is pressed.
 void Player::keyPressEvent(QKeyEvent *event){
+    if (event->key() == Qt::Key_Space){
+                  game->pauseGame();
 
-   // if (event->key()  == Qt::Key_Space || event->key() == Qt::Key_T){
-        if (event->key() == Qt::Key_Space){
-                      game->pauseGame();
+    //Key pressed inolved in making test track.
+    }
+    else if (event->key() == Qt::Key_T){
+                  game->test->changeValue();
+    }
 
+    //Moving sidebars individually.
+    else if(event->key() == Qt::Key_U){
+        game->manageSideBar->moveUp2();
+    }
+    else if(event->key() == Qt::Key_J){
+        game->manageSideBar->moveDown2();
+    }
+    else if(event->key() == Qt::Key_I){
+        game->manageSideBar->moveUp();
+    }
+    else if(event->key() == Qt::Key_K){
+        game->manageSideBar->moveDown();
+    }
 
-        }
-        else if (event->key() == Qt::Key_T){
-                      game->test->changeValue();
-
-        }
-   // }
-    //else{
-
-        //moving sidebars individually
-        else if(event->key() == Qt::Key_U){
-            game->manageSideBar->moveUp2();
-        }
-        else if(event->key() == Qt::Key_J){
-            game->manageSideBar->moveDown2();
-        }
-        else if(event->key() == Qt::Key_I){
-            game->manageSideBar->moveUp();
-        }
-        else if(event->key() == Qt::Key_K){
-            game->manageSideBar->moveDown();
-        }
-
-        //main keys
-    else if (event->key()  == Qt::Key_A || event->key() == Qt::Key_S ||  Qt::Key_D || event->key() == Qt::Key_F){
-            firstRelease = true;
-           // keysPressed+= event->key();
-            keysPressed += ((QKeyEvent*)event)->key();
+    //Main keys presses to hit notes.
+else if (event->key()  == Qt::Key_A || event->key() == Qt::Key_S ||  Qt::Key_D || event->key() == Qt::Key_F){
+        firstRelease = true;
+        keysPressed += ((QKeyEvent*)event)->key();
    }
-
-
 }
+
+//Action taken when key is released.
 void Player::keyReleaseEvent(QKeyEvent *event){
+    //When keys are released then process currently pressed keys.
     if(firstRelease){
         processMultiKey();
-        destroyEnemy2();
+        destroyEnemy();
     }
     firstRelease = false;
-   // keysPressed-= event->key();
     keysPressed -= ((QKeyEvent*)event)->key();
-    //keysPressed.clear();
 }
 
+//Setup array values based on what keys are pressed.
 void Player::processMultiKey()
 {
     if (keysPressed.contains(Qt::Key_A)){
@@ -89,124 +85,24 @@ void Player::processMultiKey()
         array[3] = 1;
 
     }
-
-    //side
-//    if(keysPressed.contains(Qt::Key_U)){
-//        game->manageSideBar->moveUp2();
-//    }
-//    else if(keysPressed.contains(Qt::Key_J)){
-//        game->manageSideBar->moveDown2();
-//    }
-//     if(keysPressed.contains(Qt::Key_I)){
-//        game->manageSideBar->moveUp();
-//    }
-//    else if(keysPressed.contains(Qt::Key_K)){
-//        game->manageSideBar->moveDown();
-//    }
-
 }
 
-//void Player::keyPressEvent(QKeyEvent *event){
-//    if (event->key() == Qt::Key_A){
-//        destroyEnemy(0);
-
-//    }
-//    else if (event->key() == Qt::Key_S){
-//        destroyEnemy(1);
-
-//    }
-//    else if (event->key() == Qt::Key_D){
-//        destroyEnemy(2);
-
-//    }
-//    else if (event->key() == Qt::Key_F){
-//        destroyEnemy(3);
-
-//    }
-
-    //moving sidebars individually
-//    else if(event->key() == Qt::Key_U){
-//        game->manageSideBar->moveUp2();
-//    }
-//    else if(event->key() == Qt::Key_J){
-//        game->manageSideBar->moveDown2();
-//    }
-//    else if(event->key() == Qt::Key_I){
-//        game->manageSideBar->moveUp();
-//    }
-//    else if(event->key() == Qt::Key_K){
-//        game->manageSideBar->moveDown();
-//    }
-
-//    else if (event->key() == Qt::Key_Space){
-//                  game->pauseGame();
-
-//    }
-//    else if (event->key() == Qt::Key_T){
-//                  game->test->changeValue();
-
-//    }
-//}
-
-
-//not needed
-void Player::destroyEnemy(int button)
+//Destroy enemies hit and change score depending on result.
+void Player::destroyEnemy()
 {
         QList<QGraphicsItem *> colliding_items = collidingItems();
 
-        for (int i = 0, n = colliding_items.size(); i < n; ++i){
-            if (typeid(*(colliding_items[i])) == typeid(Enemy)){
-
-                //if(colliding_items[i]->x() < 300 && button == 0){
-                if(colliding_items[i]->x() < 300 && button == 0){
-                    scene()->removeItem(colliding_items[i]);
-                    delete colliding_items[i];
-                    game->score->increase();
-                    game->noteCount->increase();
-                }
-                else if(colliding_items[i]->x() >= 300 && colliding_items[i]->x() < 400 && button == 1){
-                    scene()->removeItem(colliding_items[i]);
-                    delete colliding_items[i];
-                    game->score->increase();
-                    game->noteCount->increase();
-
-                }
-                else if(colliding_items[i]->x() >= 400 && colliding_items[i]->x() < 500 && button == 2){
-                    scene()->removeItem(colliding_items[i]);
-                    delete colliding_items[i];
-                    game->score->increase();
-                    game->noteCount->increase();
-
-                }
-                else if(colliding_items[i]->x() >= 500 && colliding_items[i]->x() < 600 && button == 3){
-                    scene()->removeItem(colliding_items[i]);
-                    delete colliding_items[i];
-                    game->score->increase();
-                    game->noteCount->increase();
-
-                }
-//                else
-//                    game->score->decrease();
-                return;
-            }
-//            else
-//                game->score->decrease();
-        }
-}
-
-void Player::destroyEnemy2()
-{
-        QList<QGraphicsItem *> colliding_items = collidingItems();
-
-        //set check array
+        //Setup checkarray to keep track of which notes where a hit and which weren't.
         int checkArray[4];
         for (int i =0; i < 4; i++){
             checkArray[i] = 0;
         }
 
+        //Check collided items.
         for (int i = 0, n = colliding_items.size(); i < n; ++i){
-            //y limit to how closely it reads in the input, add "&& colliding_items[i]->y() > value here"
+            //Maybe limit y to how closely it reads in the input later, add "&& colliding_items[i]->y() > value here"
             if (typeid(*(colliding_items[i])) == typeid(Enemy) ){
+                //Determine which items collided based on x position.
                  if(colliding_items[i]->x() < 720){
                      checkArray[0] = 1;
                     // game->noteCount->increase();
@@ -231,6 +127,7 @@ void Player::destroyEnemy2()
 
         }
 
+        //Change score based on hits or misses of notes.
         bool fail = false;
         for (int i =0; i < 4; i++){
             if(array[i] == checkArray[i] && array[i] == 1){
@@ -241,11 +138,11 @@ void Player::destroyEnemy2()
               //  game->score->decrease();
 
         }
-
         if(fail == true){
             game->score->decrease();
         }
 
+        //Reset array values for next check.
         for (int i =0; i < 4; i++){
             array[i] = 0;
         }
