@@ -1,7 +1,10 @@
 #include "Test.h"
 #include <iostream>
 #include <fstream>
+
 using namespace std;
+
+//Setup test track 2D array with all 0.
 Test::Test()
 {
     track = 0;
@@ -12,16 +15,19 @@ Test::Test()
     }
 }
 
+//Increase track value to signify current row.
 void Test::raiseTrack()
 {
     track++;
 }
 
+//Setup test array value of first column to 1.
 void Test::changeValue()
 {
     testList[track][0] = 1;
 }
 
+//Make test data file to store values.
 void Test::setupTextFile()
 {
     ofstream inout;
