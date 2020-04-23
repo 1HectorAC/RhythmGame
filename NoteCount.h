@@ -6,9 +6,9 @@ class NoteCount: public QGraphicsTextItem
 {
 public:
     NoteCount(QGraphicsItem * parent = 0);
+    void increase();
     int total;
     int count;
-    void increase();
 };
 
 #endif // NOTECOUNT_H
