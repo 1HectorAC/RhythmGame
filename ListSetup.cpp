@@ -4,31 +4,38 @@
 #include <String>
 
 extern Game * game;
+
 using namespace std;
+
 ListSetup::ListSetup()
 {
     rows = 0;
 }
 
+//Setup array with specfied track based on integer value passed.
 void ListSetup::makeList(int value)
 {
+
     string choice = file(value);
     fstream input(choice);
-    int test, t1, t2, t3;
+    int t0, t1, t2, t3;
+
+    //Add values from file to array.
     while(!input.eof()){
-        input >> test >> t1 >> t2 >> t3;
-        list[rows][0] = test;
+        input >> t0 >> t1 >> t2 >> t3;
+        list[rows][0] = t0;
         list[rows][1] = t1;
         list[rows][2] = t2;
         list[rows][3] = t3;
         rows++;
     }
+    input.close();
     rows = 0;
 }
 
+//Get file name based on integer value passed.
 std::string ListSetup::file(int number)
 {
-    //change num 3 to three.txt later
     if(number == 0)
         return "tracks/test.txt";
     else if(number == 1)
@@ -41,20 +48,22 @@ std::string ListSetup::file(int number)
         return "tracks/test.txt";
 }
 
+//Get track name based on integer value passed.
 std::string ListSetup::title(int value)
 {
     if(value == 1)
-        return "Veiled in Black";
+        return "Song 1";
     else if(value == 2)
-        return "Battle of Oblivion";
+        return "Song 2";
     else if(value == 3)
-        return "Waltzing Gallop";
+        return "Song 3";
     else if(value == 4)
         return "nothing";
     else
         return "nothing";
 }
 
+//Get total number of notes in the current track.
 int ListSetup::getTotalNotes()
 {
     int total = 0;
