@@ -8,7 +8,7 @@
 #include "EnemyRow.h"
 #include "Enemy.h"
 #include "Player.h"
-#include "score.h"
+#include "Score.h"
 #include "ListSetup.h"
 #include "ManageSideBars.h"
 #include "Button.h"

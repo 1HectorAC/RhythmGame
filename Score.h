@@ -9,10 +9,10 @@ public:
     void increase();
     void increase2();
     void decrease();
+    void rewriteFile();
     int getScore();
     int highScore;
     int highs[3];
-    void rewriteFile();
     int score;
 private:
 //    int score;

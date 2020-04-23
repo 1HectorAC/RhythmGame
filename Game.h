@@ -5,7 +5,7 @@
 #include <QGraphicsScene>
 #include "EnemyRow.h"
 #include "Player.h"
-#include "score.h"
+#include "Score.h"
 //#include "Health.h"
 #include "ListSetup.h"
 #include "SongOptions.h"

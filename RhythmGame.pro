@@ -29,7 +29,6 @@ SOURCES += \
     Enemy.cpp \
     EnemyRow.cpp \
     Player.cpp \
-    score.cpp \
     Health.cpp \
     ListSetup.cpp \
     Button.cpp \
@@ -38,7 +37,8 @@ SOURCES += \
     ManageSideBars.cpp \
     SideGoal.cpp \
     NoteCount.cpp \
-    Test.cpp
+    Test.cpp \
+    Score.cpp
 
 CONFIG += c++11
 QT += widgets
@@ -49,7 +49,6 @@ HEADERS += \
     Enemy.h \
     EnemyRow.h \
     Player.h \
-    score.h \
     Health.h \
     ListSetup.h \
     Button.h \
@@ -58,7 +57,8 @@ HEADERS += \
     ManageSideBars.h \
     sideGoal.h \
     NoteCount.h \
-    Test.h
+    Test.h \
+    Score.h
 
 FORMS += \
         MainWindow.ui
