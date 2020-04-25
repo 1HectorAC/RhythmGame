@@ -1,10 +1,4 @@
 #include "Game.h"
-#include <QTimer>
-#include <QGraphicsTextItem>
-#include <QFont>
-#include <QBrush>
-#include <QImage>
-#include <fstream>
 #include "EnemyRow.h"
 #include "Enemy.h"
 #include "Player.h"
@@ -12,52 +6,61 @@
 #include "ListSetup.h"
 #include "ManageSideBars.h"
 #include "Button.h"
+#include "Test.h"
+#include "math.h"
+#include <QTimer>
+#include <QGraphicsTextItem>
+#include <QFont>
+#include <QBrush>
+#include <QImage>
+#include <fstream>
 #include <QLineEdit>
 #include <QPoint>
 #include <sstream>
 #include <QHBoxLayout>
 #include <QString>
 #include <QGraphicsTextItem>
-#include "Test.h"
 #include <iostream>
-#include "math.h"
 
 using namespace std;
+
 Game::Game(QWidget *parent){
     scene = new QGraphicsScene();
-    // 800 x 1200 now, maybe change later.
+    // Set the the width in height size of screen.
     GLOBAL_WIDTH = 1920;
     GLOBAL_HEIGHT = 1080;
 
+    //Setup scene and some settings.
     scene->setSceneRect(0,0, GLOBAL_WIDTH, GLOBAL_HEIGHT);
     setScene(scene);
     setHorizontalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
     setVerticalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
-
    setFixedSize(GLOBAL_WIDTH,GLOBAL_HEIGHT);
+
+   //Setup songOptions to control songs later.
     songOptions = new SongOptions;
+
+    //Set pause boolean to check if paused.
     paused = false;
-    paused2 = false;
 
 }
 
 void Game::start(){
-
+    //Need to clear screen for when playing again. This function can be called multiple times.
     scene->clear();
+
+    //listSetup object used for making right track to play.
     listSetup = new ListSetup;
+
+    //Testing object used in making test tracks with song playing.
     test = new Test();
 
-    //set up song option from string to int
-//    string song = songChoice->text().toLocal8Bit().constData();
-//    int number;
-//    if ( ! (istringstream(song) >> number) ) number = 0;
-
-
+    //Setup background image.
     QImage stuff("resources/gameScreen4.png");
     setBackgroundBrush(QBrush(stuff.scaled(GLOBAL_WIDTH,GLOBAL_HEIGHT)));
 
 
-    //score
+    //Add score object to scene.
     score = new Score();
     score->setPos(score->x(), score->y() + GLOBAL_HEIGHT / 55);
     scene->addItem(score);
@@ -67,7 +70,7 @@ void Game::start(){
 //    health->setPos(health->x() + globalWidth / 3, health->y() + globalHeight / 55);
 //    scene->addItem(health);
 
-    //title of song
+    //Add song title object to scene.
     string test = listSetup->title(globalSongNum);
     QString test2 = QString::fromStdString(test);
     QGraphicsTextItem * titleSong = new QGraphicsTextItem(QString(test2));
@@ -77,77 +80,69 @@ void Game::start(){
     titleSong->setPos(titleSong->x() + GLOBAL_WIDTH / 3, titleSong->y() + GLOBAL_HEIGHT / 55);
     scene->addItem(titleSong);
 
-    //player
+    //Add player object to scene.
     player = new Player();
-    //200, 1000
     player->setPos(round(GLOBAL_WIDTH * (.365)), GLOBAL_WIDTH * 0.467);
     player->setFlag(QGraphicsItem::ItemIsFocusable);
     player->setFocus();
     scene->addItem(player);
 
+    //Add EnemyRow object to scene.
     enemys = new EnemyRow();
     scene->addItem(enemys);
 
-    //side bar
+    //Add ManageSideBar object to scene.
     manageSideBar = new ManageSideBars();
-    //scene->addItem(manageSideBar);
 
-    //////////////////////////////////////////edit here was number
-    //setup list
+    //Setup which track to play for listSetup.
     listSetup->makeList(globalSongNum);
 
-    //note count
+    //Add NoteCount object to scene.
     noteCount = new NoteCount();
     noteCount->setPos(GLOBAL_WIDTH -  155, noteCount->y() + GLOBAL_HEIGHT / 55);
     scene->addItem(noteCount);
 
-    //spawn enemy and select song
-    //next to each other to prevent delay of track from spawns
+    //Timer to spawn enemies and start song are next to each other to shorten delay between the  two.
     timer = new QTimer();
     QObject::connect(timer,SIGNAL(timeout()),enemys,SLOT(dropEnemys()));
     songOptions->selectSong(globalSongNum);
     timer->start(180);
-    ////////////////////////////////////////////////////edit here was number
 
     show();
-
 }
 
-void Game::selectTransition()
-{
+//Need to adjust how set globalSongNum.
+//Function to set globalSongNum to 1 and start game.
+void Game::selectTransition(){
     globalSongNum = 1;
     start();
 }
-
-void Game::selectOne()
-{
+//Function to set globalSongNum to 1 and start game.
+void Game::selectOne(){
     globalSongNum = 1;
     start();
 }
-
-void Game::selectTwo()
-{
+//Function to set globalSongNum to 2 and start game.
+void Game::selectTwo(){
     globalSongNum = 2;
     start();
 }
-
-void Game::selectThree()
-{
+//Function to set globalSongNum to 3 and start game.
+void Game::selectThree(){
     globalSongNum = 3;
     start();
 }
 
 
 void Game::displayMainMenu(){
-    //high score return here with highScore var
-
+    //Need to clear screen for when playing again. This function can be called multiple times.
     scene->clear();
 
-    //set intro music
+    //Play intro song.
     songOptions->selectSong(10);
     songOptions->play();
 
-    // create the title text
+    //Add title text object to scene.
     QGraphicsTextItem* titleText = new QGraphicsTextItem(QString("Rhythm Game"));
     QFont titleFont("comic sans",28, QFont::Bold);
     titleFont.setUnderline(true);
@@ -158,7 +153,7 @@ void Game::displayMainMenu(){
     titleText->setPos(txPos,tyPos);
     scene->addItem(titleText);
 
-    // create the author
+    //Add author text object to scene.
     QGraphicsTextItem* titleTexts = new QGraphicsTextItem(QString("By H&A inc."));
     QFont titleFonts("comic sans",15);
     titleTexts->setFont(titleFonts);
@@ -168,81 +163,56 @@ void Game::displayMainMenu(){
     titleTexts->setPos(txPoss,tyPoss);
     scene->addItem(titleTexts);
 
-//////////////////////////////////////////////////////////////////////////////////////////////
-    // text box info
-//    QGraphicsTextItem* songselect = new QGraphicsTextItem(QString("please enter song(0-3)"));
-//    //QFont titleFon("comic sans",20);
-//    songselect->setFont(titleFonts);
-//    songselect->setDefaultTextColor(Qt::white);
-//    int bxPos = this->width()/2 - songselect->boundingRect().width()/2;
-//    int byPos = 600;
-//    songselect->setPos(bxPos,byPos);
-//    scene->addItem(songselect);
+    //Add button object to play Song1.
+    Button* buttonOne = new Button(QString("Song 1"));
+    int cxPos = this->width()/2 - buttonOne->boundingRect().width()/2;
+    int cyPos = 500;
+    buttonOne->setPos(cxPos,cyPos);
+    connect(buttonOne,SIGNAL(clicked()),this,SLOT(selectOne()));
+    scene->addItem(buttonOne);
 
-    //text box
-//    songChoice = new QLineEdit();
-//    int qxPos = this->width()/2 - 150;
-//    int qyPos = 800;
-//    QSize size;
-//    size.setHeight(80);
-//    size.setWidth(300);
-//    songChoice->resize(size);
-//    QPoint check;
-//    check.setX(qxPos);
-//    check.setY(qyPos);
-//    songChoice->move(check);
-//    scene->addWidget(songChoice);
+    //Add button object to play Song1.
+    Button* buttonTwo = new Button(QString("Song 2"));
+    int cxPos2 = this->width()/2 - buttonTwo->boundingRect().width()/2;
+    int cyPos2 = 600;
+    buttonTwo->setPos(cxPos2,cyPos2);
+    connect(buttonTwo,SIGNAL(clicked()),this,SLOT(selectTwo()));
+    scene->addItem(buttonTwo);
 
+    //Add button object to play Song1.
+    Button* buttonThree = new Button(QString("Song 3"));
+    int cxPos3 = this->width()/2 - buttonThree->boundingRect().width()/2;
+    int cyPos3 = 700;
+    buttonThree->setPos(cxPos3,cyPos3);
+    connect(buttonThree,SIGNAL(clicked()),this,SLOT(selectThree()));
+    scene->addItem(buttonThree);
 
-//    Button* playButton = new Button(QString("play"));
-//    int cxPos = this->width()/2 - playButton->boundingRect().width()/2;
-//    int cyPos = 1000;
-//    playButton->setPos(cxPos,cyPos);
-//    connect(playButton,SIGNAL(clicked()),this,SLOT(start()));
-//    scene->addItem(playButton);
-    //////////////////////////////////////////////////////////////////////////////////////////////
-        Button* buttonOne = new Button(QString("Veiled in Black"));
-        int cxPos = this->width()/2 - buttonOne->boundingRect().width()/2;
-        int cyPos = 500;
-        buttonOne->setPos(cxPos,cyPos);
-        connect(buttonOne,SIGNAL(clicked()),this,SLOT(selectOne()));
-        scene->addItem(buttonOne);
-
-        Button* buttonTwo = new Button(QString("Battle of Oblivion"));
-        int cxPos2 = this->width()/2 - buttonTwo->boundingRect().width()/2;
-        int cyPos2 = 600;
-        buttonTwo->setPos(cxPos2,cyPos2);
-        connect(buttonTwo,SIGNAL(clicked()),this,SLOT(selectTwo()));
-        scene->addItem(buttonTwo);
-
-        Button* buttonThree = new Button(QString("Waltzing Gallop"));
-        int cxPos3 = this->width()/2 - buttonThree->boundingRect().width()/2;
-        int cyPos3 = 700;
-        buttonThree->setPos(cxPos3,cyPos3);
-        connect(buttonThree,SIGNAL(clicked()),this,SLOT(selectThree()));
-        scene->addItem(buttonThree);
-
+    //Set background image.
     QImage stuff("resources/startMenu2.png");
     setBackgroundBrush(QBrush(stuff.scaled(GLOBAL_WIDTH,GLOBAL_HEIGHT)));
 }
 
-void Game::displayGameOverWindow()
-{
+void Game::displayGameOverWindow(){
+    //Keep track of current score and the highscore for the track before clearing scene.
     int lastHighScore = score->highScore;
     int myScore = score->getScore();
-    QString scores = QString("Your Score: ")+QString::number(myScore);
-
+    //Write over high score in file if necessary.
     score->rewriteFile();
     scene->clear();
+
+    //Play game end song.
     songOptions->selectSong(11);
     songOptions->play();
     songOptions->startCount = 0;
+
+    //Make test file with test track.
     test->setupTextFile();
 
+    //Set background image.
     QImage stuff("resources/startMenu2.png");
     setBackgroundBrush(QBrush(stuff.scaled(GLOBAL_WIDTH,GLOBAL_HEIGHT)));
 
-    //text
+    //Add End of Game text to scene.
     QGraphicsTextItem* overText = new QGraphicsTextItem(QString("End of Game"));
     QFont titleFont("comic sans",30, QFont::Bold);
     overText->setFont(titleFont);
@@ -250,7 +220,7 @@ void Game::displayGameOverWindow()
     overText->setPos(this->width()/2 - overText->boundingRect().width()/2, 200);
     scene->addItem(overText);
 
-    //report high Score;
+    //Add highScore text to scene.
     QGraphicsTextItem* displayHighScore = new QGraphicsTextItem(QString("High Score:") + QString::number(lastHighScore));
     QFont highScoreFont("comic sans",18);
     displayHighScore->setDefaultTextColor(Qt::white);
@@ -259,7 +229,8 @@ void Game::displayGameOverWindow()
    scene->addItem(displayHighScore);
 
 
-    //report score
+    //Add current score text to scene.
+   QString scores = QString("Your Score: ")+QString::number(myScore);
     QGraphicsTextItem* displayScore = new QGraphicsTextItem( scores);
     QFont scoreFont("comic sans",18);
      displayScore->setDefaultTextColor(Qt::white);
@@ -267,7 +238,7 @@ void Game::displayGameOverWindow()
     displayScore->setPos(this->width()/2 - displayScore->boundingRect().width()/2, 400);
     scene->addItem(displayScore);
 
-    //report got new highScore
+    //Add text stating if new highscore was set.
     if ( myScore > lastHighScore){
         QGraphicsTextItem* displayIfNew = new QGraphicsTextItem( QString("New High Score!!"));
         QFont IfFont("comic sans",18);
@@ -277,18 +248,19 @@ void Game::displayGameOverWindow()
         scene->addItem(displayIfNew);
     }
 
+    //Add button to go to main menu to scene.
     Button* menu = new Button(QString("Main Menu"));
     menu->setPos(this->width()/2 - menu->boundingRect().width()/2  ,600);
     scene->addItem(menu);
     connect(menu,SIGNAL(clicked()),this,SLOT(displayMainMenu()));
 
-    // create playAgain button
+    //Add button to retry current song to scene.
     Button* playAgain = new Button(QString("Retry"));
     playAgain->setPos(this->width()/2 - playAgain->boundingRect().width()/2,710);
     scene->addItem(playAgain);
     connect(playAgain,SIGNAL(clicked()),this,SLOT(start()));
 
-    // create quit button
+    //Add button to quit to scene.
     Button* quit = new Button(QString("Quit"));
     quit->setPos(this->width()/2 - quit->boundingRect().width()/2 ,820);
     scene->addItem(quit);
@@ -297,15 +269,16 @@ void Game::displayGameOverWindow()
 
 }
 
-void Game::pauseGame()
-{
+void Game::pauseGame(){
+    //Check if game can pause.
     if(!paused){
         paused = !paused;
+
+        //Pause song and droping enemies at nearly the same time to sustain song sync with track.
         songOptions->pause();
-        //fix
         enemys->timer->stop();
 
-        //pause text
+        //Add pause text to scene.
         pauseText = new QGraphicsTextItem(QString("PAUSE"));
         QFont titleFonts("comic sans",15);
         pauseText->setFont(titleFonts);
@@ -315,54 +288,45 @@ void Game::pauseGame()
         pauseText->setPos(txPoss,tyPoss);
         scene->addItem(pauseText);
 
-        //play button
+        //Add play button to scene.
         plays = new Button(QString("Play"));
         plays->setPos(this->width()/2 - plays->boundingRect().width()/2,500);
         scene->addItem(plays);
         connect(plays,SIGNAL(clicked()),this,SLOT(unPause()));
 
         /*
-        //Error found where playing another track after returning to main menu will still have the game paused and no song playing
-        // go to main menu
+        //Error found where playing another track after returning to main menu. The game will still be paused and no song will play.
+        //Add main menu button to scene.
         menu = new Button(QString("Main Menu"));
         menu->setPos(this->width()/2 - menu->boundingRect().width()/2  ,600);
         scene->addItem(menu);
         connect(menu,SIGNAL(clicked()),this,SLOT(displayMainMenu()));
         */
-
    }
-
-
-        // disable all scene items
-//    if(!paused2){
-//        for (size_t i = 0, n = scene->items().size(); i < n; i++)
-//            scene->items()[i]->setEnabled(false);
-//        cout << "paused" << endl;
-//    }
-//    else{
-//        for (size_t i = 0, n = scene->items().size(); i < n; i++)
-//            scene->items()[i]->setEnabled(true);
-//        cout << "not paused" << endl;
-//    }
-//    paused2 = !paused2;
-
 }
 
 void Game::unPause()
 {
-     paused = !paused;
+    paused = !paused;
+
+    //Remove pause text.
     scene->removeItem(pauseText);
    delete pauseText;
+
+    //Remove play button.
     scene->removeItem(plays);
    delete plays;
 
     //fix menu first
+    //Remove main menu button.
     //scene->removeItem(menu);
     //delete menu;
 
+    //Start song and enemy drop timer. These need to be next to each other to lower delay bettween the two.
     enemys->timer->start(5);
     songOptions->play();
-   player->setFocus();
+
+    player->setFocus();
 
 }
 

@@ -20,6 +20,8 @@ class Game: public QGraphicsView{
     Q_OBJECT
 public:
     Game(QWidget * parent=NULL);
+    void displayGameOverWindow();
+    void pauseGame();
 
     QGraphicsScene * scene;
     Player * player;
@@ -29,16 +31,13 @@ public:
 //    Health * health;
     ListSetup * listSetup;
     Test * test;
-
-    void displayGameOverWindow();
-    void pauseGame();
     QLineEdit * songChoice;
     SongOptions * songOptions;
     EnemyRow * enemys;
     QGraphicsTextItem* pauseText;
     int GLOBAL_WIDTH;
     int GLOBAL_HEIGHT;
-    bool paused, paused2;
+    bool paused;
     ManageSideBars * manageSideBar;
     int globalSongNum;
     Button* plays;
