@@ -73,11 +73,11 @@ void Game::start(){
     //Add song title object to scene.
     string test = listSetup->title(globalSongNum);
     QString test2 = QString::fromStdString(test);
-    QGraphicsTextItem * titleSong = new QGraphicsTextItem(QString(test2));
-    QFont titleFont("times",16);
+    QGraphicsTextItem * titleSong = new QGraphicsTextItem(QString("~" + test2 + "~"));
+    QFont titleFont("times", GLOBAL_HEIGHT / 60);
     titleSong->setFont(titleFont);
     titleSong->setDefaultTextColor(Qt::white);
-    titleSong->setPos(titleSong->x() + GLOBAL_WIDTH / 3, titleSong->y() + GLOBAL_HEIGHT / 55);
+    titleSong->setPos(GLOBAL_WIDTH / 4, titleSong->y());
     scene->addItem(titleSong);
 
     //Add player object to scene.

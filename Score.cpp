@@ -17,7 +17,7 @@ Score::Score(QGraphicsItem *parent): QGraphicsTextItem(parent){
     // Draw text and setup styling.
     setPlainText(QString("Score: ") + QString::number(score));
     setDefaultTextColor(Qt::white);
-    setFont(QFont("times",16));
+    setFont(QFont("times", game->GLOBAL_HEIGHT / 60));
 
     //Get the highest scores from the file.
     ifstream file;

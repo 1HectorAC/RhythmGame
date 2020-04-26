@@ -13,7 +13,7 @@ NoteCount::NoteCount(QGraphicsItem *parent): QGraphicsTextItem(parent)
     //Add styling to text object.
     setPlainText(QString::number(count) + QString("/") + QString::number(total));
     setDefaultTextColor(Qt::white);
-    setFont(QFont("times",16));
+    setFont(QFont("times", game->GLOBAL_HEIGHT / 60));
 }
 
 //Increase note count and update text display of it.
