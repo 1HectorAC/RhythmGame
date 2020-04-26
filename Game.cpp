@@ -40,14 +40,14 @@ Game::Game(QWidget *parent){
    //Setup songOptions to control songs later.
     songOptions = new SongOptions;
 
-    //Set pause boolean to check if paused.
-    paused = false;
-
 }
 
 void Game::start(){
     //Need to clear screen for when playing again. This function can be called multiple times.
     scene->clear();
+
+    //Set pause boolean to check if paused.
+    paused = false;
 
     //listSetup object used for making right track to play.
     listSetup = new ListSetup;
@@ -102,10 +102,11 @@ void Game::start(){
     noteCount->setPos(GLOBAL_WIDTH -  155, noteCount->y() + GLOBAL_HEIGHT / 55);
     scene->addItem(noteCount);
 
-    //Timer to spawn enemies and start song are next to each other to shorten delay between the  two.
+    //Start droping enemies and start song.
     timer = new QTimer();
     QObject::connect(timer,SIGNAL(timeout()),enemys,SLOT(dropEnemys()));
     songOptions->selectSong(globalSongNum);
+    songOptions->startCount = 0;
     timer->start(180);
 
     show();
@@ -275,8 +276,9 @@ void Game::pauseGame(){
         paused = !paused;
 
         //Pause song and droping enemies at nearly the same time to sustain song sync with track.
-        songOptions->pause();
         enemys->timer->stop();
+        songOptions->pause();
+
 
         //Add pause text to scene.
         pauseText = new QGraphicsTextItem(QString("PAUSE"));
@@ -294,14 +296,12 @@ void Game::pauseGame(){
         scene->addItem(plays);
         connect(plays,SIGNAL(clicked()),this,SLOT(unPause()));
 
-        /*
-        //Error found where playing another track after returning to main menu. The game will still be paused and no song will play.
         //Add main menu button to scene.
         menu = new Button(QString("Main Menu"));
         menu->setPos(this->width()/2 - menu->boundingRect().width()/2  ,600);
         scene->addItem(menu);
         connect(menu,SIGNAL(clicked()),this,SLOT(displayMainMenu()));
-        */
+
    }
 }
 
@@ -317,10 +317,9 @@ void Game::unPause()
     scene->removeItem(plays);
    delete plays;
 
-    //fix menu first
     //Remove main menu button.
-    //scene->removeItem(menu);
-    //delete menu;
+    scene->removeItem(menu);
+    delete menu;
 
     //Start song and enemy drop timer. These need to be next to each other to lower delay bettween the two.
     enemys->timer->start(5);
