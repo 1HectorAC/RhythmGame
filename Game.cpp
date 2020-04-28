@@ -81,8 +81,7 @@ void Game::start(){
     scene->addItem(titleSong);
 
     //Add player object to scene.
-    player = new Player();
-    player->setPos(round(GLOBAL_WIDTH * (.365)), GLOBAL_WIDTH * 0.467);
+    player = new Player(round(GLOBAL_WIDTH * (.365)), round(GLOBAL_WIDTH * 0.467));
     player->setFlag(QGraphicsItem::ItemIsFocusable);
     player->setFocus();
     scene->addItem(player);

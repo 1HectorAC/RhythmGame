@@ -8,10 +8,17 @@
 
 extern Game * game;
 
-Player::Player(QGraphicsItem *parent): QGraphicsPixmapItem(parent){
+Player::Player(int x, int y, QGraphicsItem *parent): QGraphicsPixmapItem(parent){
     //Set width and height of player.
     width = game->GLOBAL_WIDTH / 3.763;
     height = game->GLOBAL_HEIGHT / 11.35;
+
+    //Set position of object.
+    setPos(x,y);
+
+    //Set x_Position and y_Position. This will be used in colition detection.
+    x_Position = x;
+    y_Position = y;
 
     // set graphic image of player and size based on width and height.
     QImage images("resources/starStrip.png");
@@ -98,24 +105,28 @@ void Player::destroyEnemy()
             checkArray[i] = 0;
         }
 
+        //Note lengths need for calculating collision.
+        int NoteLength = int(width / 4);
+        int halfNote = int(NoteLength / 2);
+
         //Check collided items.
         for (int i = 0, n = colliding_items.size(); i < n; ++i){
             //Maybe limit y to how closely it reads in the input later, add "&& colliding_items[i]->y() > value here"
-            if (typeid(*(colliding_items[i])) == typeid(Enemy) ){
+            if (typeid(*(colliding_items[i])) == typeid(Enemy) && colliding_items[i]->y() > y_Position + 4 ){
                 //Determine which items collided based on x position.
-                 if(colliding_items[i]->x() < 720){
+                 if(colliding_items[i]->x() < x_Position + halfNote){
                      checkArray[0] = 1;
                     // game->noteCount->increase();
                  }
-                 else if(colliding_items[i]->x() >= 720 && colliding_items[i]->x() < 850){
+                 else if(colliding_items[i]->x() >=  x_Position + halfNote && colliding_items[i]->x() <  x_Position + NoteLength + halfNote){
                      checkArray[1] = 1;
                     // game->noteCount->increase();
                  }
-                 else if(colliding_items[i]->x() >= 850 && colliding_items[i]->x() < 975){
+                 else if(colliding_items[i]->x() >=  x_Position + NoteLength + halfNote && colliding_items[i]->x() <  x_Position + NoteLength * 2 + halfNote){
                      checkArray[2] = 1;
                      //game->noteCount->increase();
                  }
-                 else if(colliding_items[i]->x() >= 990 && colliding_items[i]->x() < 1100 ){
+                 else if(colliding_items[i]->x() >=  x_Position + NoteLength * 2 + halfNote ){
                      checkArray[3] = 1;
                      //game->noteCount->increase();
                  }

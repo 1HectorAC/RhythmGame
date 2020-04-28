@@ -9,7 +9,7 @@
 class Player:public QObject, public QGraphicsPixmapItem{
     Q_OBJECT
 public:
-    Player(QGraphicsItem * parent=0);
+    Player(int x, int y, QGraphicsItem * parent=0);
     void keyPressEvent(QKeyEvent * event);
     void keyReleaseEvent(QKeyEvent *event);
     void processMultiKey();
@@ -19,6 +19,8 @@ public:
     int array[4];
     int width;
     int height;
+    int x_Position;
+    int y_Position;
     QSet<int> keysPressed;
 //    QMediaPlayer * hitsound;
 
